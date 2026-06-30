@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Latihan Chat</title>
+  <style>
+    * {
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  
+  body {
+    background: #0e0e0e;
+    color: #e4e6eb;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  h1 {
+    color: #00a884;
+    margin-bottom: 20px;
+  }
+
+  #chat, #prolog {
+    background: #1f2c34;
+    width: 100%;
+    max-width: 400px;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  }
+
+  #hasil {
+    height: 400px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px;
+    margin: 12px 0;
+    background: #0b141a;
+    border-radius: 8px;
+  }
+
+  .bubble {
+    max-width: 75%;
+    padding: 8px 12px;
+    border-radius: 8px;
+    line-height: 1.4;
+    word-wrap: break-word;
+  }
+
+  .bubble-user {
+    background: #005c4b;
+    align-self: flex-end;
+    border-bottom-right-radius: 2px;
+  }
+
+  .bubble-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: #53bdeb;
+    margin-bottom: 2px;
+  }
+
+  .input-row {
+    display: flex;
+    gap: 8px;
+  }
+
+  input {
+    flex: 1;
+    padding: 10px 12px;
+    border: none;
+    border-radius: 20px;
+    background: #2a3942;
+    color: #e4e6eb;
+    outline: none;
+  }
+
+  input::placeholder {
+    color: #8696a0;
+  }
+
+  button {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 20px;
+    background: #00a884;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background: #008069;
+  }
+
+  #chat button:first-child {
+    background: #2a3942;
+    margin-bottom: 8px;
+    width: 100%;
+  }
+
+  .warning {
+    color: #ff6b6b;
+    text-align: center;
+    font-size: 14px;
+  }
+</style>
+</head>
+<body>
+  <h1>VaironChat</h1>
+  
+  <div id="chat">
+    <button onclick="login()">Login</button>
+    <div id="hasil"></div>
+    <div class="input-row">
+      <input id="ketik" placeholder="Ketik pesan..." onkeydown="if(event.key==='Enter') kirim()">
+      <button onclick="kirim()">Send</button>
+    </div>
+  </div>
+
+  <div id="prolog">
+    <div class="input-row">
+      <input id="nama" placeholder="Ketik nama disini..." onkeydown="if(event.key==='Enter') save()">
+      <button onclick="save()">Save</button>
+    </div>
+  </div>
+
+  <script>
+    const chat = document.getElementById('chat')
+    const hasil = document.getElementById("hasil")
+    const ketik = document.getElementById("ketik")
+    const prolog = document.getElementById("prolog")
+    const nama = document.getElementById("nama")
+    let loginin = false
+    prolog.style.display = 'none'
+    let hnama = ""
+
+    function login() {
+      chat.style.display = 'none'
+      prolog.style.display = 'block'
+      nama.focus()
+    }
+
+    function save() {
+      if(nama.value.trim() === "") return
+      loginin = true
+      hnama = nama.value.trim()
+      chat.style.display = 'block'
+      prolog.style.display = 'none'
+      ketik.focus()
+    }
+    
+    function kirim() {
+      const nih = ketik.value.trim()
+      if(nih === "") return
+
+      if (!loginin) {
+        hasil.innerHTML = `<div class="warning">Login dulu jink</div>`
+      } else {
+        hasil.innerHTML += `
+          <div class="bubble bubble-user">
+            <div class="bubble-name">${hnama}</div>
+            ${nih}
+          </div>
+        `
+        ketik.value = ""
+        hasil.scrollTop = hasil.scrollHeight // auto scroll ke bawah
+      }
+    }
+  </script>
+</body>
+</html>
